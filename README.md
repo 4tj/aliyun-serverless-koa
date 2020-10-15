@@ -4,11 +4,11 @@
 ## Getting Started
 
 ```javascript
-npm install @4tj/aliyun-serverless-koa
+npm install aliyun-serverless-koa
 ```
 
 ```javascript
-const { createServer, proxy } = require('@4tj/aliyun-serverless-koa')
+const { createServer, proxy } = require('aliyun-serverless-koa')
 const Koa = require('koa')
 
 app.use(async ctx => {
