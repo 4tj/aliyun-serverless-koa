@@ -1,4 +1,4 @@
-const { createServer, proxy } = require('../../src/index')
+const { createServer, proxy } = require('../../index')
 const Koa = require('koa')
 
 const app = new Koa()

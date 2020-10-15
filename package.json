@@ -1,0 +1,25 @@
+{
+  "name": "aliyun-serverless-koa",
+  "version": "1.0.0",
+  "description": "阿里云的函数计算Koa框架的迁移方案，更简洁的方式，实际已上线使用。",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/4tj/aliyun-serverless-koa.git"
+  },
+  "keywords": ["aliyun", "fc2", "serverless", "koa", "express"],
+  "files": ["index.js"],
+  "author": "csdk@outlook.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/4tj/aliyun-serverless-koa/issues"
+  },
+  "homepage": "https://github.com/4tj/aliyun-serverless-koa#readme",
+  "publishConfig": { "registry": "https://npm.pkg.github.com" }
+}
