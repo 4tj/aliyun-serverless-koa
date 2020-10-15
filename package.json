@@ -1,6 +1,6 @@
 {
-  "name": "aliyun-serverless-koa",
-  "version": "1.0.0",
+  "name": "@4tj/aliyun-serverless-koa",
+  "version": "1.0.1",
   "description": "阿里云的函数计算Koa框架的迁移方案，更简洁的方式，实际已上线使用。",
   "main": "index.js",
   "directories": {
@@ -20,6 +20,5 @@
   "bugs": {
     "url": "https://github.com/4tj/aliyun-serverless-koa/issues"
   },
-  "homepage": "https://github.com/4tj/aliyun-serverless-koa#readme",
-  "publishConfig": { "registry": "https://npm.pkg.github.com" }
+  "homepage": "https://github.com/4tj/aliyun-serverless-koa#readme"
 }
