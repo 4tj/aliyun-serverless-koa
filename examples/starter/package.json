@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "koa": "^2.13.0"
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^9.4.0",
+    "aliyun-serverless-koa": "^1.0.2",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0"
   }
 }
