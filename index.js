@@ -1,23 +1,32 @@
 const http = require('http')
 const path = require('path')
 const os = require('os')
+const url = require('url')
+
+function getQueryString(event) {
+  return url.format({pathname: event.path, query: event.queryParameters})
+}
 
 function getSocketPath (suffix) {
   return path.join(os.tmpdir(), `server-${suffix}.sock`)
 }
 
 function getEventBody (event) {
-  return Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
+  return Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8').toString()
 }
 
-function getRequestOptions (event, context, socketPath) {
+function getEventJSON(event) {
+  return JSON.parse(event.toString())
+}
+
+function getRequestOptions (event, socketPath) {
   const headers = { ...event.headers }
   delete headers['content-length']
   delete headers['accept-encoding']
 
   return {
     method: event.httpMethod,
-    path: event.path,
+    path: getQueryString(event),
     headers,
     socketPath
   }
@@ -33,7 +42,7 @@ function forwardError (error, callback) {
   })
 }
 
-function forwardResponse (server, response, callback) {
+function forwardResponse (response, callback) {
   const buf = []
   response
     .on('data', (chunk) => buf.push(chunk))
@@ -51,15 +60,14 @@ function forwardResponse (server, response, callback) {
 
 function forwardRequest (server, event, context, callback) {
   try {
-    const requestOptions = getRequestOptions(event, context, getSocketPath(server._socketPath))
-    const req = http.request(requestOptions, (response) => forwardResponse(server, response, callback))
+    const requestOptions = getRequestOptions(event, getSocketPath(server._socketPath))
+    const req = http.request(requestOptions, (response) => forwardResponse(response, callback))
     if (event.body) {
       req.write(getEventBody(event))
     }
-
-    req.on('error', (err) => forwardError(err)).end()
+    req.on('error', (err) => console.error(err)).end()
   } catch (err) {
-    console.log(err)
+    forwardError(err, callback)
   }
 }
 
@@ -96,11 +104,12 @@ function createServer (requestListener, listenCallback) {
 }
 
 function proxy (server, event, context, callback) {
+  const eventJSON = getEventJSON(event)
   if (server._isListening) {
-    forwardRequest(server, event, context, callback)
+    forwardRequest(server, eventJSON, context, callback)
     return server
   } else {
-    startServer(server).on('listening', () => forwardRequest(server, event, context, callback))
+    startServer(server).on('listening', () => forwardRequest(server, eventJSON, context, callback))
   }
 }
 
