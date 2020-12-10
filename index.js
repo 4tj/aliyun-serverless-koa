@@ -3,8 +3,8 @@ const path = require('path')
 const os = require('os')
 const url = require('url')
 
-function getQueryString(event) {
-  return url.format({pathname: event.path, query: event.queryParameters})
+function getQueryString (event) {
+  return url.format({ pathname: event.path, query: event.queryParameters })
 }
 
 function getSocketPath (suffix) {
@@ -15,7 +15,7 @@ function getEventBody (event) {
   return Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8').toString()
 }
 
-function getEventJSON(event) {
+function getEventJSON (event) {
   return JSON.parse(event.toString())
 }
 
@@ -60,7 +60,7 @@ function forwardResponse (response, callback) {
 
 function forwardRequest (server, event, context, callback) {
   try {
-    const requestOptions = getRequestOptions(event, getSocketPath(server._socketPath))
+    const requestOptions = getRequestOptions(event, server._socketPath)
     const req = http.request(requestOptions, (response) => forwardResponse(response, callback))
     if (event.body) {
       req.write(getEventBody(event))
@@ -76,19 +76,19 @@ function getRandomString () {
 }
 
 function startServer (server) {
-  return server.listen(getSocketPath(server._socketPath))
+  return server.listen(server._socketPath)
 }
 
 function createServer (requestListener, listenCallback) {
   const server = http.createServer(requestListener)
 
-  server._socketPath = getRandomString()
+  server._socketPath = getSocketPath(getRandomString())
 
   server.on('listening', () => {
     server._isListening = true
 
     if (listenCallback) {
-      listenCallback()
+      listenCallback(server)
     }
   })
 
